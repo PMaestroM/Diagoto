@@ -3,6 +3,7 @@ import 'package:diagoto/models/automobile.dart';
 class Diagnostic {
   final DateTime date; // date du diagnostic
   final Automobile automobile; // automobile concernée par le diagnostic
+  
 
   Diagnostic({required this.date, required this.automobile});
 

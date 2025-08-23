@@ -1,5 +1,6 @@
 import 'package:diagoto/models/automobile.dart';
 import 'package:diagoto/models/diagnostic.dart';
+import 'package:diagoto/screens/controle_essentiels_securite.dart';
 import 'package:diagoto/services/json_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -96,7 +97,7 @@ class _CreerDiagnosticState extends State<CreerDiagnostic> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async{
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             Diagnostic diagnostic = Diagnostic(
@@ -110,10 +111,13 @@ class _CreerDiagnosticState extends State<CreerDiagnostic> {
               ),
             );
             storage.saveDiagnostic(diagnostic);
-            Navigator.pop(context);
+            await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ControleEssentielsSecurite()),
+            );
           }
         },
-        child: const Icon(Icons.save),
+        child: const Icon(Icons.keyboard_double_arrow_right),
       ),
     );
   }

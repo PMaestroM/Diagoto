@@ -1,11 +1,17 @@
 import 'package:diagoto/models/controle_securite/carrosserie.dart';
+import 'package:diagoto/models/controle_securite/freins.dart';
+import 'package:diagoto/models/controle_securite/phares_signalisation.dart';
 import 'package:diagoto/models/controle_securite/pneus.dart';
+import 'package:diagoto/models/controle_securite/suspension_direction.dart';
+import 'package:diagoto/models/diagnostic.dart';
+import 'package:diagoto/models/securite.dart';
 import 'package:diagoto/screens/optimiser_performances.dart';
 import 'package:diagoto/services/json_storage.dart';
 import 'package:flutter/material.dart';
 
 class ControleEssentielsSecurite extends StatefulWidget {
-  const ControleEssentielsSecurite({super.key});
+  final Diagnostic diagnostic;
+  const ControleEssentielsSecurite({super.key, required this.diagnostic});
 
   @override
   State<ControleEssentielsSecurite> createState() => _ControleEssentielsSecuriteState();
@@ -126,6 +132,14 @@ class _ControleEssentielsSecuriteState extends State<ControleEssentielsSecurite>
               pressionPneus: _pressionPneus,
               alignementPneus: _alignementPneus,
             );
+            widget.diagnostic.securite = Securite(
+              carrosserie: carrosserie,
+              pneus: pneus,
+              freins: Freins(), // Valeurs par défaut ou nulles
+              pharesSignalisation: PharesSignalisation(), // Valeurs par défaut ou nulles
+              suspensionDirection: SuspensionDirection(), // Valeurs par défaut ou nulles
+            );
+            storage.saveDiagnostic(widget.diagnostic);
             await Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const OptimiserPerformances()),

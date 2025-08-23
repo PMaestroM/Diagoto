@@ -1,5 +1,11 @@
 import 'package:diagoto/models/automobile.dart';
+import 'package:diagoto/models/controle_securite/carrosserie.dart';
+import 'package:diagoto/models/controle_securite/freins.dart';
+import 'package:diagoto/models/controle_securite/phares_signalisation.dart';
+import 'package:diagoto/models/controle_securite/pneus.dart';
+import 'package:diagoto/models/controle_securite/suspension_direction.dart';
 import 'package:diagoto/models/diagnostic.dart';
+import 'package:diagoto/models/securite.dart';
 import 'package:diagoto/screens/controle_essentiels_securite.dart';
 import 'package:diagoto/services/json_storage.dart';
 import 'package:flutter/material.dart';
@@ -109,11 +115,18 @@ class _CreerDiagnosticState extends State<CreerDiagnostic> {
                 kilometrage: _kilometrage!,
                 typeCarburant: _typeCarburant!,
               ),
+              securite: Securite(
+                carrosserie: Carrosserie(),
+                freins: Freins(),
+                pharesSignalisation: PharesSignalisation(),
+                pneus: Pneus(),
+                suspensionDirection: SuspensionDirection(),
+              ), // Initialisé avec des valeurs par défaut
             );
             storage.saveDiagnostic(diagnostic);
             await Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ControleEssentielsSecurite()),
+              MaterialPageRoute(builder: (context) => ControleEssentielsSecurite(diagnostic: diagnostic)),
             );
           }
         },

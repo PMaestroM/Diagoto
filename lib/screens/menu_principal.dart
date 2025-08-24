@@ -1,6 +1,7 @@
 import 'package:diagoto/models/diagnostic.dart';
 import 'package:diagoto/screens/creer_diagnostic.dart';
 import 'package:diagoto/services/json_storage.dart';
+import 'package:diagoto/services/pdf_export.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final JsonStorage storage = JsonStorage();
+  final PdfExport pdfExport = PdfExport();
   List<Diagnostic> diagnostics = [];
   
   @override
@@ -25,6 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       diagnostics = loaded;
     });
+  }
+
+  Future<void> _exportPdf(Diagnostic diagnostic) async {
+    final file = await pdfExport.generatePdf(diagnostic);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("PDF généré : ${file.path}")),
+    );
   }
 
   @override
@@ -68,9 +77,15 @@ class _HomeScreenState extends State<HomeScreen> {
           return ListTile(
             title: Text('${diagnostic.automobile.marque} ${diagnostic.automobile.modele}'),
             subtitle: Text('Immatriculation: ${diagnostic.automobile.immatriculation}'),
-            // onTap: () {
-            //   // Action when tapping on a diagnostic (e.g., view details)
-            // },
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.picture_as_pdf, color: Colors.blue),
+                  onPressed: () => _exportPdf(diagnostic),
+                ),
+              ],
+            ),
           );
         },
       ),
